@@ -28,13 +28,14 @@ public class StateManager {
 
 	// Passed Gold.
 	protected Gold gold;
-	
+
 	public ArrayList<Enemy> enemies;
 
 	private State[] states; // The states the StatesManager is
-										// managing.
+							// managing.
 	private int currentState; // The index position on the states arrayList.
-	private boolean isPlayingSurvival;// The boolean value if survival mode is selected.
+	private boolean isPlayingSurvival;// The boolean value if survival mode is
+										// selected.
 	private Cheat cheat; // The Cheat handler.
 
 	/**
@@ -44,34 +45,37 @@ public class StateManager {
 	public StateManager() {
 		// Creates an arraylist for states.
 		this.states = new State[this.NUMBER_OF_STATES];
-		
+
 		// Set isPlayingSurvival condition.
 		this.isPlayingSurvival = false;
-		
+
 		this.cheat = new Cheat(this);
 
 		// Sets the currentState to the menuState.
 		this.currentState = 0;
-		
+
 		loadState(this.currentState);
-		
+
 		// Initialize a player object and enemy with null level.
 		// this.gold = new Gold(this);
 		this.player = new Digger(null);
-		
+
 		this.enemies = new ArrayList<Enemy>();
 
 		// Initialize the bullet.
 		this.bullet = new Bullet(this);
 
 	}
-	
+
 	/**
 	 * Sets the specified state to the corresponding State.
 	 *
-	 * @param state the specified state to update.
+	 * @param state
+	 *            the specified state to update.
 	 */
 	public void loadState(int state) {
+		long start = System.nanoTime();
+
 		// Constants.
 		final int MENU_STATE = 0;
 		final int LEVEL_0 = 1;
@@ -80,23 +84,24 @@ public class StateManager {
 		final int LEVEL_3 = 4;
 		final int HIGH_SCORE_STATE = 5;
 		final int SURVIVAL_STATE = 6;
-		
-		// Find corresponding state to update. Use final variables to obtain the correct numbers.
+
+		// Find corresponding state to update. Use final variables to obtain the
+		// correct numbers.
 		if (state == MENU_STATE) {
 			this.states[state] = new MenuState(this);
-		} 
+		}
 		if (state == LEVEL_0) {
 			this.states[state] = new LevelState(this, LEVEL_0 - 1);
-		} 
+		}
 		if (state == LEVEL_1) {
 			this.states[state] = new LevelState(this, LEVEL_1 - 1);
 		}
 		if (state == LEVEL_2) {
-			this.states[state] = new LevelState(this, LEVEL_2 - 1); 
+			this.states[state] = new LevelState(this, LEVEL_2 - 1);
 		}
 		if (state == LEVEL_3) {
 			this.states[state] = new LevelState(this, LEVEL_3 - 1);
-		} 
+		}
 		if (state == HIGH_SCORE_STATE) {
 			if (this.isPlayingSurvival) {
 				this.states[state] = new LevelState(this, LEVEL_0 - 1);
@@ -108,29 +113,34 @@ public class StateManager {
 			this.states[state] = new LevelState(this, LEVEL_0 - 1);
 			this.isPlayingSurvival = true;
 		}
+
+		long delta = System.nanoTime() - start;
+		System.err.println("Load time (ms): " + (delta / 1000000L));
+
 	}
-	
+
 	/**
 	 * Set the specified state to null.
 	 *
-	 * @param state the specified state in relation to the states array.
+	 * @param state
+	 *            the specified state in relation to the states array.
 	 */
 	public void unloadState(int state) {
 		if (state == 0) {
 			this.states[state] = null;
-		} 
+		}
 		if (state == 1) {
-			this.states[state] = null;		
-		} 
+			this.states[state] = null;
+		}
 		if (state == 2) {
-			this.states[state] = null;		
-		} 
+			this.states[state] = null;
+		}
 		if (state == 3) {
-			this.states[state] = null;		
-		} 
+			this.states[state] = null;
+		}
 		if (state == 4) {
-			this.states[state] = null;		
-		} 
+			this.states[state] = null;
+		}
 		if (state == 5) {
 			this.states[state] = null;
 		}
@@ -159,7 +169,8 @@ public class StateManager {
 	}
 
 	/**
-	 * Returns an array list of enemies. Useful for bullet to track enemy collision boxes.
+	 * Returns an array list of enemies. Useful for bullet to track enemy
+	 * collision boxes.
 	 * 
 	 * @return an array list of enemies.
 	 */
@@ -167,7 +178,7 @@ public class StateManager {
 		return this.enemies;
 
 	}
-	
+
 	/**
 	 * Sets the field array list enemies.
 	 *
@@ -233,11 +244,11 @@ public class StateManager {
 	public Bullet getBullet() {
 		return this.bullet;
 	}
-	
+
 	public boolean getIsPlayingSurvival() {
 		return this.isPlayingSurvival;
 	}
-	
+
 	public void setIsPlayingSurvival(boolean isPlayingSurvival) {
 		this.isPlayingSurvival = isPlayingSurvival;
 	}
